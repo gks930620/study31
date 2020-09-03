@@ -1,0 +1,68 @@
+# read 37 txt
+IMemberDao : 각 메서드 connection 제거 , refactor 메서드 정의변경
+
+MemberServiceImpl : 기존 Connectio 제거
+LoginServiceImpl : 기존 커넥션 제거
+
+/mybatis/mybatis-config.xml  : 리소스 등록(쿼리파일)
+/mybatis/mapper/member.xml 매퍼파일 작성
+
+창희 pl의 하루 
+
+MyBatis 동적 sql 처리 
+
+--MyBatis 동적 SQL 처리 
+ : 메뉴얼에는 null 비교만 하는데.. 공백은요?
+ 
+ test="title !=null"
+ test="title =='CD' " 
+ test='title == "CD" ' 
+ test=title.equals("CD")'
+ :기존 유틸리티를 사용하고 싶어요  > @완전한클래스이름@메서드           .없다 
+ <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchCategory)">
+ 
+ mybatis :xml 문서이다 보니 
+ 	특수문자 <,>,&   ====   &gt;&lt;&amp;  
+ 						or <!CDATA[>]]>
+  
+ 
+ 
+ 
+ 
+ ICommonCodeDao : 각 메서드에 Connection을 제거   refactor   						  완 
+ CommonCodeServiceImpl 기존 커넥션 제거 factory 및 SqlSession으로 변경					완
+ /mybatis/mapper/code.xml 파일 작성       꼭 상단에 <cache/> 설정해주세요				    완??
+ /mybatis/mybatis-config.xml 에  code.xml 등록    											완	
+ 
+ 
+ 
+ 
+ #mypage (내정보,정보변경,패스워드변경,기록보기...)
+ 
+ 
+ #1. 회원정보변경 ( 비번빼고)
+ /mypage/info.wow=com.study.mypage.web.InfoController
+ /mypage/edit.wow=com.study.mypage.web.EditController 		: memberEdit.jsp
+ /mypage/modify.wow=com.study.mypage.web.ModifyController   //redirect 하지말고 성공여부를 메시지로 
+ 
+ 위 InfoController,EditController 에서 return null
+ 
+ #2. RequestToViewNameTranslator    뷰 완성
+ 
+ 
+ 
+ #3. 사용자의 ROLE 구성 
+ Table user_role (id,role) 생성, 기존 회원정보에서 데이터 입력 
+ 필터: ManagerCheckFiler <-LoginCheckFilter 복사    filter mapping(web.xml)
+ 태그:
+ 	sec.tag  
+ 	<mytag.sec hasRole="MANAGER">	[삭제]</mytag:sec>        //매니저권한 있는분만 삭제할수 있게 
+ 	, [저장]	
+
+
+
+
+
+
+	
+	 

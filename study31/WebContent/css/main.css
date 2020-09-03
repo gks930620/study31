@@ -1,0 +1,13 @@
+@charset "UTF-8";
+/* /css/main.css */
+
+.loginForm {
+	max-width: 360px;
+	margin: 0 auto;
+	padding: 15px;
+}
+
+body {
+  min-height: 2000px;
+  padding-top: 70px;
+}

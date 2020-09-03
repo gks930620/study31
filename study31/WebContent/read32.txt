@@ -1,0 +1,18 @@
+# read32.txt
+
+32일차 : 공통메시지 처리 (redirect, forward)
+		 글수정, 삭제 부분을 ResultMessageVO로 처리
+		 필요시 redirect로
+
+33일차 : 회원관리(관리자) 처리하기 (자유게시판처럼)
+		 com.study.member.web : MemberListController, ...
+		 각 jsp 파일에 있는 비즈니스 로직 코드를 컨트롤러에 적용
+		 study_uri.properties에 uri와 컨트롤러 등록 후 테스트
+
+34일차 : 16장 사용자 정의 태그라이브러리
+
+35일차 : 필터
+
+36,7일차 : MyBatis
+-----------------------------
+38~44일차 : Spring

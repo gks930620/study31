@@ -1,0 +1,29 @@
+# read 37 txt
+IMemberDao : 각 메서드 connection 제거 , refactor 메서드 정의변경
+
+MemberServiceImpl : 기존 Connectio 제거
+LoginServiceImpl : 기존 커넥션 제거
+
+/mybatis/mybatis-config.xml  : 리소스 등록(쿼리파일)
+/mybatis/mapper/member.xml 매퍼파일 작성
+
+창희 pl의 하루 
+
+MyBatis 동적 sql 처리 
+
+--MyBatis 동적 SQL 처리 
+ : 메뉴얼에는 null 비교만 하는데.. 공백은요?
+ :기존 유틸리티를 사용하고 싶어요  > @완전한 팩키지클래스@메서드
+ 
+ 
+ ICommonCodeDao : 각 메서드에 Connection을 제거   refactor   						  완 
+ CommonCodeServiceImpl 기존 커넥션 제거 factory 및 SqlSession으로 변경					완
+ /mybatis/mapper/code.xml 파일 작성       꼭 상단에 <cache/> 설정해주세요				    완??
+ /mybatis/mybatis-config.xml 에  code.xml 등록    											완	
+
+
+
+
+
+	
+	 

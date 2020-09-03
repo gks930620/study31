@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace : 간단하게해도되지만 mapper클래스를 사용하실려면 완전한 이름의 클래스이름을 지정 -->
+<mapper namespace="com.study.member.dao.IMemberDao">
+	<sql id="whereClause">
+		<if
+			test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchJob)">
+			AND mem_job=#{searchJob}
+		</if>
+		<if
+			test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchLike)">
+			AND mem_like=#{searchLike}
+		</if>
+		<if
+			test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchWord)">
+			<choose>
+				<when test='searchType=="NM"'>AND mem_name LIKE '%' || #{searchWord}||'%'</when>
+				<when test='searchType=="ID"'>AND mem_id LIKE '%' || #{searchWord}||'%'</when>
+				<when test='searchType=="HP"'>AND mem_hp LIKE '%' || #{searchWord}||'%'</when>
+				<when test='searchType=="ADDR"'>AND mem_add1 LIKE '%' || #{searchWord}||'%'</when>
+				<otherwise>AND mem_name LIKE '%' || #{searchWord}||'%'</otherwise>
+			</choose>
+		</if>
+	</sql>
+
+
+	<select id="getMemberList"
+		resultType="com.study.member.vo.MemberVO"
+		parameterType="com.study.member.vo.MemberSearchVO">
+		SELECT * FROM ( SELECT rownum as rnum, a.* FROM (
+
+		SELECT mem_id ,
+		mem_pass , mem_name
+		, TO_CHAR(mem_bir,'YYYY-MM-DD') AS memBir
+		, mem_zip
+		, mem_add1
+		, mem_add2 , mem_hp , mem_mail
+		, mem_job
+		, b.comm_nm as
+		memJobNm
+		, mem_like
+		, c.comm_nm as memLikeNm
+		, mem_mileage
+		, mem_delete
+		FROM member, comm_code b, comm_code c
+		WHERE mem_job = b.comm_cd
+		AND
+		mem_like = c.comm_cd
+		AND (mem_delete = 'N' or mem_delete is null)	
+		
+		<!-- include하기  -->
+		<include refid="whereClause"/>
+		  
+		<![CDATA[
+		) a WHERE rownum <= #{lastRow} ) b WHERE rnum BETWEEN #{firstRow} AND #{lastRow}
+		]]>
+	</select>
+
+	<select id="getMemberCount" resultType="int"
+		parameterType="com.study.member.vo.MemberSearchVO">
+		SELECT count(*)
+		FROM member
+		where (mem_delete = 'N' or
+		mem_delete is null)
+		<!-- include하기  -->
+			<include refid="whereClause"/>
+		
+		
+	</select>
+
+	<insert id="insertMember"
+		parameterType="com.study.member.vo.MemberVO">
+		INSERT INTO member (
+		mem_id , mem_pass , mem_name
+		,
+		mem_bir , mem_zip , mem_add1
+		, mem_add2 , mem_hp , mem_mail
+		, mem_job ,
+		mem_like , mem_mileage
+		, mem_delete
+		) VALUES (
+		#{memId} , #{memPass} ,
+		#{memName}
+		, #{memBir} , #{memZip} , #{memAdd1}
+		, #{memAdd2} , #{memHp}
+		, #{memMail}
+		, #{memJob} , #{memLike} , 0
+		,'N')
+	</insert>
+
+	<update id="updateMember"
+		parameterType="com.study.member.vo.MemberVO">
+		UPDATE member
+		SET mem_name = #{memName} , mem_bir =
+		#{memBir} , mem_zip = #{memZip}
+		, mem_add1 = #{memAdd1} , mem_add2 =
+		#{memAdd2} , mem_hp = #{memHp}
+		, mem_mail = #{memMail} , mem_job =
+		#{memJob} , mem_like = #{memLike}
+		WHERE mem_id = #{memId}
+	</update>
+
+	<update id="deleteMember"
+		parameterType="com.study.member.vo.MemberVO">
+		UPDATE member
+		SET mem_delete = 'Y'
+		WHERE mem_id = #{memId}
+	</update>
+
+	<select id="getMember" resultType="com.study.member.vo.MemberVO"
+		parameterType="String">
+		SELECT mem_id , mem_pass , mem_name
+		, TO_CHAR(mem_bir,'YYYY-MM-DD') AS memBir
+		, mem_zip , mem_add1
+		, mem_add2 , mem_hp , mem_mail
+		, mem_job
+		, (select comm_nm from comm_code where comm_cd = mem_job) as memJobNm
+		, mem_like
+		, (select comm_nm from comm_code where comm_cd = mem_like) as memLikeNm
+		, mem_mileage
+		, mem_delete
+		FROM member
+		where mem_id = #{memId}
+
+	</select>
+
+	<select id="getUserRoleByUserId" parameterType="String" resultType="String">
+		SELECT LISTAGG(role_nm,',') WITHIN GROUP(ORDER BY role_nm )
+		FROM user_role WHERE user_id=#{userId}
+		
+	</select>
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

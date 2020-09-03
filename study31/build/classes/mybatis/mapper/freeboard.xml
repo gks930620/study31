@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace : 간단하게해도되지만 mapper클래스를 사용하실려면 완전한 이름의 클래스이름을 지정 -->
+<mapper namespace="com.study.free.dao.IFreeBoardDao">
+
+	<sql id="whereClause">
+		<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchCategory)">
+			AND bo_category=#{searchCategory}
+		</if>
+		<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(searchWord)">
+			<choose>
+				<when test='searchType=="T"'>AND bo_title LIKE '%' || #{searchWord}||'%'</when>
+				<when test='searchType=="W"'>AND bo_writer LIKE '%' || #{searchWord}||'%'</when>
+				<when test='searchType=="C"'>AND bo_content LIKE '%' || #{searchWord}||'%'</when>
+				<otherwise>AND bo_title LIKE '%' || #{searchWord}||'%'</otherwise>
+			</choose>
+		</if>
+	</sql>
+	
+	
+
+
+	<select id="getBoardCount" resultType="int"
+		parameterType="com.study.free.vo.FreeBoardSearchVO">
+		SELECT count(*)
+		FROM free_board
+		WHERE bo_del_yn = 'N'
+		
+		 <include refid="whereClause" />
+	</select>
+
+	<select id="getBoardList"
+		resultType="com.study.free.vo.FreeBoardVO"
+		parameterType="com.study.free.vo.FreeBoardSearchVO">
+
+		 <include refid="common.PRE_PAGING_SQL"></include> 
+
+		SELECT bo_no
+		, comm_nm as boCategoryNm
+		, bo_pass
+		, bo_ip
+		, bo_title
+		,
+		bo_writer
+		, TO_CHAR(bo_reg_date,'YYYY-MM-DD') AS bo_reg_date
+		,
+		TO_CHAR(bo_mod_date,'YYYY-MM-DD') AS bo_mod_date
+		, bo_hit
+		FROM
+		free_board a, comm_code b
+		WHERE bo_category = b.comm_cd
+		AND bo_del_yn
+		='N'
+		
+		  <include refid="whereClause" /> 
+		ORDER BY bo_no DESC
+
+		<include refid="common.SUF_PAGING_SQL"></include> 
+
+
+	</select>
+
+	<select id="getBoard" resultType="com.study.free.vo.FreeBoardVO"
+
+		parameterType="int">
+		SELECT
+		bo_no , bo_title , bo_pass
+		, (select comm_nm from
+		comm_code where comm_cd = bo_category) as boCategoryNm
+		, bo_writer,
+		bo_content
+		, bo_ip, bo_hit
+		, TO_CHAR(bo_reg_date,'YYYY-MM-DD HH24:MI')
+		as boRegDate
+		, bo_del_yn
+		, TO_CHAR(bo_mod_date,'YYYY-MM-DD HH24:MI') as boModDate
+		FROM free_board
+		where bo_no = #{xxx}
+
+
+	</select>
+
+	<insert id="insertBoard"	parameterType="com.study.free.vo.FreeBoardVO">
+		
+		INSERT INTO free_board (
+		bo_no, bo_title, bo_category,
+		bo_writer, bo_pass
+		, bo_content, bo_ip, bo_hit, bo_reg_date,
+		bo_mod_date
+		, bo_del_yn
+		) VALUES (
+		seq_free_board.nextval , #{boTitle} ,
+		#{boCategory}
+		, #{boWriter} , #{boPass}
+		, #{boContent} , #{boIp} , 0
+		,
+		sysdate , null , 'N')
+		
+	</insert>
+
+	<update id="updateBoard"
+		parameterType="com.study.free.vo.FreeBoardVO">
+		UPDATE free_board
+		SET bo_title = #{boTitle}
+		, bo_category
+		= #{boCategory}
+		, bo_content = #{boContent}
+		, bo_mod_date = sysdate
+		WHERE bo_no = #{boNo}
+	</update>
+
+
+	<update id="deleteBoard"
+		parameterType="com.study.free.vo.FreeBoardVO">
+		UPDATE free_board
+		SET bo_del_yn = 'Y'
+		WHERE bo_no =#{boNo}
+	</update>
+
+
+	<update id="increaseHit" parameterType="int">
+		UPDATE free_board
+		SET
+		bo_hit = bo_hit+1
+		WHERE bo_no = #{xxx}
+	</update>
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

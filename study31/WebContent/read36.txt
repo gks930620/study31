@@ -1,0 +1,30 @@
+# read36.txt
+
+DAO : JDBC 관련 작업 처리
+	- 중복된 코딩이 많다  Connection,pstmet에서의 파라미터 설정 등
+-쉽게 할 수 없을까?
+ 쿼리를 외부파일로 생성하면 어떨까?  >>> 결과론 xml파일 
+ 
+ 각 IT업체에서 이미 솔루션을 가지고 있었다.
+ 이게 오픈소스화  된게 : iBatis>>MyBatis
+ 
+ src:mybatis:mybatis-config.xml  생성
+ 	 mybatis.mapper : 각 매퍼파일 생성 (member.xml, freeboard.xml ,...)
+ 	  
+db: 비교연산자 >,< 문제  xml문서에서
+		<: &lt;
+		>: &gt;
+		<![CDATA[<]]>	
+		
+ImemberDao: 각 메서드에 connection을 제거 : refactor 메서드 정의 변경     完
+MemberServiceImpl 기존 Connection 제거, catch fianlly 제거   完
+
+mybatis/mybatis-config.xml에 매퍼 등록하기 (쿼리파일 )    完
+mybatis/mapper/   에 member.xml 작성
+
+
+
+
+
+	
+	 

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace : 간단하게해도되지만 mapper클래스를 사용하실려면 완전한 이름의 클래스이름을 지정 -->
+<mapper namespace="common">
+
+	<sql id="PRE_PAGING_SQL">
+	SELECT *  FROM ( SELECT rownum as rnum, a.* FROM (
+	</sql>
+	
+	<sql id="SUF_PAGING_SQL">
+			<![CDATA[	) a WHERE rownum <= #{lastRow} ) b WHERE rnum BETWEEN #{firstRow} AND #{lastRow}	]]>
+	</sql>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

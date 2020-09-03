@@ -1,0 +1,8 @@
+# read31.txt
+
+메인 컨트롤러 (프론트 컨트롤러)
+ - 일을 위임받아서 실제 처리하는 커맨드 객체
+ - 액션폼(스트럿츠), 커맨드 핸들러 객체 (디자인 패턴), 컨트롤러(스프링)
+
+FreeEditController, FreeModifyController 완성하기
+	- modify.jsp에서 예외는 2개만 처리 exNotFound, exPassword

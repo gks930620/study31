@@ -1,0 +1,28 @@
+# read35.txt
+
+35일차 : 필터
+	- 필터는 클라이언트의 요청 전, 후에 공통적인 기능을
+	  처리하기 가장 좋은 서블릿 객체
+	
+	- 구현은 쉽고, 기능은 막강하다
+	
+	- 필터는 여러개를 구성할 수 있으며
+	  정의된 순서대로 필터 체인이 생성됨
+	  
+	- /views/mypage/info.jsp <- memberView.jsp 복사
+	  com.study.mypage.web.InfoController <- MemberViewController 복사
+	  
+	- LoginCheckFilter
+	  요청 전에 세션에 "USER_INFO"가 존재하면 들여보내고,
+	  없으면 "/login/login.wow"로 리다이렉트
+	  
+	- url 매핑 /mypage/* , /member/*
+	
+과제 :
+	- IPCheckFilter
+	  거부아이피인 경우 "현재 접속하신 IP(192.168.20.xx)는 거부된 IP입니다.
+	  					 문의사항이 있으시면 전화 : 042-719-8850으로 연락주세요."	
+	  					 
+	- url매핑 *.wow
+	
+	
